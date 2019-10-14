@@ -87,6 +87,12 @@ namespace EFCoreBug01
                     Console.WriteLine("So, where value != null");
                 if (values.Count() == 0)
                     Console.WriteLine("So, where value == 0");
+
+                foreach(var item in values)
+                {
+                    Console.WriteLine("error, call");
+                }
+                Console.WriteLine("So, foreach no exception");
             }
         }
         static void Main(string[] args)
