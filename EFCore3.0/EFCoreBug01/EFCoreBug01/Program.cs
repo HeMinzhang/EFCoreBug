@@ -72,6 +72,23 @@ namespace EFCoreBug01
                 var values = dbContext.keyValues.Where(v => v.KeyId == item.Id).ToList();//So,No error
             }
         }
+        static async Task Change03(ApplicationDbContext dbContext)
+        {
+            if(await dbContext.keyValues.CountAsync() == 0)
+            {
+                var values = dbContext.keyValues.ToList();
+                if (values != null)
+                    Console.WriteLine("So, to List value != null");
+                if(values.Count() == 0)
+                    Console.WriteLine("So, to List value == 0");
+
+                values = dbContext.keyValues.Where(v => v.Key == "asp.net").ToList();
+                if (values != null)
+                    Console.WriteLine("So, where value != null");
+                if (values.Count() == 0)
+                    Console.WriteLine("So, where value == 0");
+            }
+        }
         static void Main(string[] args)
         {
             using (var context = new ApplicationDbContext())
@@ -80,7 +97,8 @@ namespace EFCoreBug01
                 //InsertBug01(context).Wait();
                 //Change01(context).Wait();
                 //Change02(context).Wait();
-                FixChange02(context).Wait();
+                //FixChange02(context).Wait();
+                Change03(context).Wait();
             }
         }
     }
