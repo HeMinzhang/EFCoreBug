@@ -72,6 +72,34 @@ namespace EFCoreBug01
                 var values = dbContext.keyValues.Where(v => v.KeyId == item.Id).ToList();//So,No error
             }
         }
+        
+        static IEnumerable<CdKey> GetTestKey(ApplicationDbContext dbContext)
+        {
+            return dbContext.CdKeys.Where(k => k.BuildType == BuildType.Test);
+        }
+        static void Change02_2(ApplicationDbContext dbContext)
+        {
+            var keys = GetTestKey(dbContext);
+            foreach(var item in keys)
+            {
+                dbContext.keyValues.Where(v => v.Key == "c sharp...").ToList();//should same error...
+            }
+        }
+        static IEnumerable<KeyValue> GetTestKeySecond(ApplicationDbContext dbContext)
+        {
+            var result = new List<KeyValue>();
+            var keys = dbContext.CdKeys.Where(k => k.BuildType == BuildType.Test);
+            foreach (var item in keys)
+            {
+                var values = dbContext.keyValues.Where(v => v.Key == "c sharp...");//should same error...
+                result.AddRange(values);
+            }
+            return result;
+        }
+        static void Change02_3(ApplicationDbContext dbContext)
+        {
+            var values = GetTestKeySecond(dbContext);
+        }
         static async Task Change03(ApplicationDbContext dbContext)
         {
             if(await dbContext.keyValues.CountAsync() == 0)
@@ -104,7 +132,9 @@ namespace EFCoreBug01
                 //Change01(context).Wait();
                 //Change02(context).Wait();
                 //FixChange02(context).Wait();
-                Change03(context).Wait();
+                //Change02_2(context);
+                Change02_3(context);
+                //Change03(context).Wait();
             }
         }
     }
