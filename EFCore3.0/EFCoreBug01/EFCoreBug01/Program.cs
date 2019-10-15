@@ -19,6 +19,17 @@ namespace EFCoreBug01
             };
             await dbContext.AddAsync(key);
         }
+        static void InsertBug01_01(ApplicationDbContext dbContext)
+        {
+            //https://github.com/aspnet/EntityFrameworkCore/issues/18263#issuecomment-541369431
+            var key = new CdKey
+            {
+                //Id = Guid.NewGuid().ToString(), //this bug fix solution
+                Name = "asp.net",
+                BuildType = BuildType.Test
+            };
+            dbContext.Add(key);
+        }
         static async Task Change01(ApplicationDbContext dbContext)
         {
             //https://github.com/aspnet/EntityFrameworkCore/issues/18358
@@ -177,7 +188,8 @@ namespace EFCoreBug01
             using (var context = new ApplicationDbContext())
             {
                 context.Database.EnsureCreated();
-                InsertBug01(context).Wait();
+                //InsertBug01(context).Wait();
+                InsertBug01_01(context);
                 //Change01(context).Wait();
                 //Change02(context).Wait();
                 //FixChange02(context).Wait();
