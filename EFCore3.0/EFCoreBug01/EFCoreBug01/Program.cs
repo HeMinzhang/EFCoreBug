@@ -100,6 +100,46 @@ namespace EFCoreBug01
         {
             var values = GetTestKeySecond(dbContext);
         }
+        static void ClientLinqTest(ApplicationDbContext dbContext, Func<CdKey, bool> cdKeyFunc, Func<KeyValue, bool> keyValuefunc)
+        {
+            //https://docs.microsoft.com/en-us/ef/core/querying/client-eval
+            if (dbContext.keyValues.Count() == 0)
+            {
+                var result = new List<KeyValue>();
+                var keys = dbContext.CdKeys.AsEnumerable().Where(k => cdKeyFunc(k));//Client linq
+
+                foreach (var item in keys)
+                {
+                    var values = dbContext.keyValues.AsEnumerable().Where(v => keyValuefunc(v));//should same error...
+                    result.AddRange(values);
+                }
+            }
+        }
+        static void Change02_4(ApplicationDbContext dbContext)
+        {
+            ClientLinqTest(dbContext, k => k.BuildType == BuildType.Test, v => v.Key == "c sharp ...");
+        }
+        static void ClientLinqTestSecond(ApplicationDbContext dbContext, Func<CdKey, bool> cdKeyFunc, Func<KeyValue, bool> keyValuefunc)
+        {
+            //https://docs.microsoft.com/en-us/ef/core/querying/client-eval
+            if (dbContext.keyValues.Count() == 0 && dbContext.CdKeys.Count() != 0)
+            {
+                var result = new List<KeyValue>();
+                var keys = dbContext.CdKeys.AsEnumerable().Where(k => cdKeyFunc(k)).ToList();//Client linq
+
+                foreach (var item in keys)
+                {
+                    var values = dbContext.keyValues.AsEnumerable().Where(v => keyValuefunc(v)).ToList();//should same error...
+                    result.AddRange(values);
+                    if(values != null)
+                        Console.WriteLine($"keyValue != null, keyValue count = {values.Count()}");
+                }
+            }
+        }
+        static void Change02_5(ApplicationDbContext dbContext)
+        {
+            ClientLinqTestSecond(dbContext, k => k.BuildType == BuildType.Test, v => v.Key == "c sharp ...");
+        }
         static async Task Change03(ApplicationDbContext dbContext)
         {
             if(await dbContext.keyValues.CountAsync() == 0)
@@ -123,6 +163,7 @@ namespace EFCoreBug01
                 Console.WriteLine("So, foreach no exception");
             }
         }
+
         static void Main(string[] args)
         {
             using (var context = new ApplicationDbContext())
@@ -133,7 +174,9 @@ namespace EFCoreBug01
                 //Change02(context).Wait();
                 //FixChange02(context).Wait();
                 //Change02_2(context);
-                Change02_3(context);
+                //Change02_3(context);
+                //Change02_4(context);
+                Change02_5(context);
                 //Change03(context).Wait();
             }
         }
