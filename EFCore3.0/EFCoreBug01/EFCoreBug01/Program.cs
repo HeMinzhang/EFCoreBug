@@ -177,14 +177,14 @@ namespace EFCoreBug01
             using (var context = new ApplicationDbContext())
             {
                 context.Database.EnsureCreated();
-                //InsertBug01(context).Wait();
+                InsertBug01(context).Wait();
                 //Change01(context).Wait();
                 //Change02(context).Wait();
                 //FixChange02(context).Wait();
                 //Change02_2(context);
-                Change02_3(context);
+                // Change02_3(context);
                 //Change02_4(context);
-                Change02_5(context);
+                // Change02_5(context);
                 //Change03(context).Wait();
             }
         }

@@ -11,7 +11,7 @@ namespace EFCoreBug01
         public DbSet<KeyValue> keyValues { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var sqlConnection = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\loong\Documents\EFCoreBug01.mdf;Integrated Security=True;MultipleActiveResultSets=True;Connect Timeout=30;MultiSubnetFailover=True";
+            var sqlConnection = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\loong\Documents\EFCoreBug01.mdf;Integrated Security=True;MultipleActiveResultSets=True;Connect Timeout=30";
             optionsBuilder.UseSqlServer(sqlConnection);
         }
     }

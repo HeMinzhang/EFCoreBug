@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace EFCoreBug01
@@ -11,6 +12,7 @@ namespace EFCoreBug01
     }
     public class CdKey
     {
+        [Key]
         public string Id { get; set; }
         public string Name { get; set; }
         public BuildType BuildType { get; set; }
