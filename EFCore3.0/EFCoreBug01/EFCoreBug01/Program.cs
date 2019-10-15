@@ -125,11 +125,11 @@ namespace EFCoreBug01
             if (dbContext.keyValues.Count() == 0 && dbContext.CdKeys.Count() != 0)
             {
                 var result = new List<KeyValue>();
-                var keys = dbContext.CdKeys.AsEnumerable().Where(k => cdKeyFunc(k)).ToList();//Client linq
+                var keys = dbContext.CdKeys.AsEnumerable().Where(k => cdKeyFunc(k)).ToList();//Client linq,Because the loading is done
 
                 foreach (var item in keys)
                 {
-                    var values = dbContext.keyValues.AsEnumerable().Where(v => keyValuefunc(v)).ToList();//should same error...
+                    var values = dbContext.keyValues.AsEnumerable().Where(v => keyValuefunc(v)).ToList();//So,No error
                     result.AddRange(values);
                     if(values != null)
                         Console.WriteLine($"keyValue != null, keyValue count = {values.Count()}");
