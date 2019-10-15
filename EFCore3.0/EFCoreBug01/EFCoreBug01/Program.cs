@@ -37,6 +37,8 @@ namespace EFCoreBug01
         static async Task Change02(ApplicationDbContext dbContext)
         {
             //https://github.com/aspnet/EntityFrameworkCore/issues/18358
+            //fix this, using SqlServer then enable MARS support. 
+            //https://docs.microsoft.com/en-us/sql/relational-databases/native-client/features/using-multiple-active-result-sets-mars?view=sql-server-ver15 
             var firstkey = new CdKey
             {
                 Id = Guid.NewGuid().ToString(), //this bug fix solution
@@ -79,6 +81,8 @@ namespace EFCoreBug01
         }
         static void Change02_2(ApplicationDbContext dbContext)
         {
+            //fix this, using SqlServer then enable MARS support. 
+            //https://docs.microsoft.com/en-us/sql/relational-databases/native-client/features/using-multiple-active-result-sets-mars?view=sql-server-ver15 
             var keys = GetTestKey(dbContext);
             foreach(var item in keys)
             {
@@ -87,6 +91,8 @@ namespace EFCoreBug01
         }
         static IEnumerable<KeyValue> GetTestKeySecond(ApplicationDbContext dbContext)
         {
+            //fix this, using SqlServer then enable MARS support. 
+            //https://docs.microsoft.com/en-us/sql/relational-databases/native-client/features/using-multiple-active-result-sets-mars?view=sql-server-ver15 
             var result = new List<KeyValue>();
             var keys = dbContext.CdKeys.Where(k => k.BuildType == BuildType.Test);
             foreach (var item in keys)
@@ -163,6 +169,8 @@ namespace EFCoreBug01
                 Console.WriteLine("So, foreach no exception");
             }
         }
+        //fix this, using SqlServer then enable MARS support. 
+        //https://docs.microsoft.com/en-us/sql/relational-databases/native-client/features/using-multiple-active-result-sets-mars?view=sql-server-ver15 
 
         static void Main(string[] args)
         {
@@ -174,7 +182,7 @@ namespace EFCoreBug01
                 //Change02(context).Wait();
                 //FixChange02(context).Wait();
                 //Change02_2(context);
-                //Change02_3(context);
+                Change02_3(context);
                 //Change02_4(context);
                 Change02_5(context);
                 //Change03(context).Wait();
